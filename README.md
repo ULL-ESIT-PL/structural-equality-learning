@@ -1,3 +1,5 @@
+# Structural Equality Solutions
+
 ## Benjamn R. Meyer's Wryware monorepo and equality package
 
 See 
@@ -5,7 +7,7 @@ See
 1. https://github.com/benjamn/wryware/tree/main
 2. https://github.com/benjamn/wryware/tree/main/packages/equality
 
-## Execution of hello-structural-equality.js
+### Execution of hello-structural-equality.js
 
 [hello-structural-equality.js](./hello-structural-equality.js) is a simple script that demonstrates the use of the 
 compiled version of the `@wry/equality` package 
@@ -36,7 +38,7 @@ true expected: true
 true expected: true
 ```
 
-## Execution of npm test using the local compiled version of the `@wry/equality` package
+### Execution of npm test using the local compiled version of the `@wry/equality` package
 
 The file [tests/testslocal.mjs](tests/testslocal.mjs) it is a translation of the original file [tests/testswry.ts](tests/testswry.ts) to a module js file.  Imports the compiled version of the `@wry/equality` package and uses it to run a series of tests that compare values for structural equality. 
 
@@ -97,7 +99,7 @@ I do not understand why but the test for async generator pass and when using the
       at process.processImmediate (node:internal/timers:511:21)
 ```
 
-## Execution of the tests using the wry package
+### Execution of the tests using the wry package
 
 The file [tests/testswry.ts](tests/testswry.ts) imports the `@wry/equality` package and uses it to run a series of tests that compare values for structural equality. 
 
