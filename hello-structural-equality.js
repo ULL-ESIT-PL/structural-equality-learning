@@ -1,4 +1,5 @@
-import { equal } from '@wry/equality';
+//import { equal } from '@wry/equality';
+import { equal } from './lib/algorithm.cjs';
 
 // Simple equality checks
 console.log("Comparing numbers:");

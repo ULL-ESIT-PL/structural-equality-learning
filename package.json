@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "main": "hello-structural-equality.js",
   "scripts": {
-    "build": "npm run clean:before && npm run tsc",
+    "build": "npm run clean:before && npm run tsc:test; npm run tsc:algorithm",
     "clean:before": "rimraf lib",
-    "tsc": "tsc tests/tests.ts --outDir lib/ && mv lib/tests.js lib/tests.cjs",
+    "tsc:algorithm": "tsc algorithm.ts --outDir lib/ && mv lib/algorithm.js lib/algorithm.cjs",
+    "tsc:test": "tsc tests/tests.ts --outDir lib/ && mv lib/tests.js lib/tests.cjs",
     "prepare": "npm run build",
     "test:esm": "mocha tests/tests.mjs",
     "test": "npm run build && mocha lib/tests.cjs"
