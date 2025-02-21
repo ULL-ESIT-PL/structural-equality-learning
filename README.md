@@ -7,39 +7,21 @@ See
 
 ## Execution of hello-structural-equality.js
 
+[hello-structural-equality.js](./hello-structural-equality.js) is a simple script that demonstrates the use of the 
+compiled version of the `@wry/equality` package 
+
+```js 
+ import { equal } from './lib/algorithm.cjs';
+```
+
+to compare values for structural equality. It compares numbers, strings, arrays, and objects with varying levels of complexity, including deep cycles.
+
 ```
 ➜  structural-equality-learning git:(main) ✗ node hello-structural-equality.js 
 Comparing numbers:
 true
 false
-
-Comparing strings:
-true
-false
-
-Comparing objects:
-true
-false
-
-Comparing arrays:
-true
-false
-
-Comparing mixed types:
-true
-false
-
-Comparing sets:
-true
-false
-
-Comparing maps:
-true
-false
-
-Comparing objects with cycles:
-true
-
+...
 Comparing arrays with deep cycles:
 true Expected: true
 true Expected: false
@@ -47,35 +29,85 @@ true
 true
 true
 true
-true Expected false?
+true Expected false? // There is s.t. I do not understand here
 
 Comparing objects with deep cycles:
 true expected: true
 true expected: true
 ```
 
-## Execution of npm test
+## Execution of npm test using the local compiled version of the `@wry/equality` package
+
+The file [tests/testslocal.mjs](tests/testslocal.mjs) it is a translation of the original file [tests/testswry.ts](tests/testswry.ts) to a module js file.  Imports the compiled version of the `@wry/equality` package and uses it to run a series of tests that compare values for structural equality. 
+
+```js
+import defaultEqual, { equal } from "../lib/algorithm.cjs";
+```
+
+I do not understand why but the test for async generator pass and when using the wry package it fails. 
 
 ```
 ➜  structural-equality-learning git:(main) ✗ npm test
 
 > structural-equality-learning@1.0.0 test
-> npm run build && mocha lib/tests.cjs
+> mocha tests/testslocal.mjs
+  equality
+> defaultEqual { equal: [Function: equal], default: [Function: equal] }
+> equal [Function: equal]
+    1) should work with named and default imports
+    ✔ should work for primitive types
+    ✔ should work for arrays
+    ✔ should work for objects
+    ✔ should consider undefined and missing object properties equivalent
+    ✔ should work for Error objects
+    ✔ should work for Date objects
+    ✔ should work for RegExp objects
+    ✔ should work for Set objects
+    ✔ should work for Map objects
+    ✔ should tolerate cycles
+    ✔ should not care about repeated references
+    ✔ should equate non-native functions with the same code
+    ✔ should equate async functions with the same code
+    ✔ should equate generator functions with the same code
+    ✔ should equate async generator functions with the same code
+    ✔ should work for Array Buffers And Typed Arrays
+    ✔ should work with a kitchen sink
+    performance
+      ✔ should be fast for arrays (2126ms)
+      ✔ should be fast for objects (1404ms)
+      ✔ should be fast for strings (546ms)
+      ✔ should be fast for functions (898ms)
 
 
-> structural-equality-learning@1.0.0 build
-> npm run clean:before && npm run tsc
+  21 passing (5s)
+  1 failing
 
+  1) equality
+       should work with named and default imports:
+     AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
 
-> structural-equality-learning@1.0.0 clean:before
-> rimraf lib
++ {
++   default: [Function: equal],
++   equal: [Function: equal]
++ }
+- [Function: equal]
 
+      at Context.<anonymous> (file:///Users/casianorodriguezleon/campus-virtual/2122/learning/compiler-learning/structural-equality-learning/tests/testslocal.mjs:26:12)
+      at process.processImmediate (node:internal/timers:511:21)
+```
 
-> structural-equality-learning@1.0.0 tsc
-> tsc tests/tests.ts --outDir lib/ && mv lib/tests.js lib/tests.cjs
+## Execution of the tests using the wry package
 
+The file [tests/testswry.ts](tests/testswry.ts) imports the `@wry/equality` package and uses it to run a series of tests that compare values for structural equality. 
 
-
+```ts
+import * as assert from "assert";
+import defaultEqual, { equal } from "@wry/equality";
+```
+It fails in the test `should equate async generator functions with the same code`:
+```
+➜  structural-equality-learning git:(main) ✗ npm run test:ts
   equality
     ✔ should work with named and default imports
     ✔ should work for primitive types
@@ -96,10 +128,10 @@ true expected: true
     ✔ should work for Array Buffers And Typed Arrays
     ✔ should work with a kitchen sink
     performance
-      ✔ should be fast for arrays (2068ms)
-      ✔ should be fast for objects (1231ms)
-      ✔ should be fast for strings (436ms)
-      ✔ should be fast for functions (1089ms)
+      ✔ should be fast for arrays (2318ms)
+      ✔ should be fast for objects (1393ms)
+      ✔ should be fast for strings (447ms)
+      ✔ should be fast for functions (1189ms)
 
 
   21 passing (5s)
@@ -117,11 +149,37 @@ false !== true
       -false
       +true
       
-      at assertEqual (lib/tests.cjs:73:12)
-      at Context.<anonymous> (lib/tests.cjs:332:9)
+      at assertEqual (lib/testswry.cjs:73:12)
+      at Context.<anonymous> (lib/testswry.cjs:332:9)
       at process.processImmediate (node:internal/timers:511:21)
 ```
 
+## Lodash 
+
+### _.isEqual
+
+Performs a deep comparison between two values to determine if they are equivalent.
+
+**Note**: This method supports comparing arrays, array buffers, booleans, date objects, error objects, maps, numbers, Object objects, regexes, sets, strings, symbols, and typed arrays. Object objects are compared by their own, not inherited, enumerable properties. Functions and DOM nodes are compared by strict equality, i.e. ===.
+
+### _.isEqualWith(value, other, [customizer])
+
+This method is like `_.isEqual` except that it accepts `customizer` which is invoked to compare values. 
+If `customizer` returns `undefined`, comparisons are handled by the method instead. 
+The `customizer` is invoked with up to six arguments: `(objValue, othValue [, index|key, object, other, stack])`.
+
+## isDeepStrictEqual
+
+See https://nodejs.org/api/util.html#util_util_isdeepstrictequal_val1_val2
+
+## Fast deep equal
+
+- https://github.com/epoberezkin/fast-deep-equal
+
+
+## References
+
+- https://stackoverflow.com/questions/201183/how-can-i-determine-equality-for-two-javascript-objects
 
 ## What is Rimraf? 
 

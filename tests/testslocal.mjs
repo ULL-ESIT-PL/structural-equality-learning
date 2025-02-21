@@ -1,5 +1,5 @@
 import * as assert from "assert";
-import defaultEqual, { equal } from "@wry/equality";
+import defaultEqual, { equal } from "../lib/algorithm.cjs";
 
 function toStr(value) {
   try {
@@ -21,6 +21,8 @@ function assertNotEqual(a, b) {
 
 describe("equality", function () {
   it("should work with named and default imports", function () {
+    console.log("> defaultEqual", defaultEqual);
+    console.log("> equal", equal);
     assert.strictEqual(defaultEqual, equal);
   });
 
