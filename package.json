@@ -3,14 +3,31 @@
   "version": "1.0.0",
   "main": "hello-structural-equality.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run clean:before && npm run tsc",
+    "clean:before": "rimraf lib",
+    "tsc": "tsc tests/tests.ts --outDir lib/ && mv lib/tests.js lib/tests.cjs",
+    "prepare": "npm run build",
+    "test:esm": "mocha tests/tests.mjs",
+    "test": "npm run build && mocha lib/tests.cjs"
   },
-  "keywords": ["structural equality", "equality", "deep equality"],
-  "type": "module", 
+  "keywords": [
+    "structural equality",
+    "equality",
+    "deep equality"
+  ],
+  "type": "module",
   "author": "Casiano Rodriguez Leon <crguezl@ull.edu.es> (https://crguezl.github.io/)",
   "license": "ISC",
-  "description": "",
+  "description": "Structural equality learning",
   "dependencies": {
     "@wry/equality": "^0.5.7"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "@types/node": "20.4.6",
+    "mocha": "^10.2.0",
+    "rimraf": "5.0.5",
+    "source-map-support": "0.5.21",
+    "typescript": "5.1.6"
   }
 }
