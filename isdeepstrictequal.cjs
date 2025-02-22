@@ -19,3 +19,9 @@ const S2 = new Set([1, 2, 3]);
 console.log(util.isDeepStrictEqual(S1, S2)) // true
 const S3 = new Set([1, 2, 3, 4]);
 console.log(util.isDeepStrictEqual(S1, S3)) // false
+
+// Cycles
+const a = []; a.push(a);
+const b = []; b.push(b);
+console.log(util.isDeepStrictEqual(a, b)); // true
+console.log(util.isDeepStrictEqual([a], [b]));  // true
