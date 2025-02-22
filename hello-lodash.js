@@ -5,10 +5,13 @@ var other = { 'a': 1 };
  
 console.log(_.isEqual(object, other)); // => true
  
+// Cycles
 const a = []; a.push(a);
 const b = []; b.push(b);
 console.log(_.isEqual(a, b)); // true
 console.log(_.isEqual([a], [b]));  // true
+
+// _.isEqualWith
 
 function isGreeting(value) {
   return /^h(?:i|ello)$/.test(value);
