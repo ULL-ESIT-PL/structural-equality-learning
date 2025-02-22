@@ -64,38 +64,7 @@ cycle2.b = cycle2;
 
 console.log(equal(cycle1, cycle2));  // true
 
-/*
-// Should tolerate deep cycles
-
-console.log("\nComparing objects with deep cycles:");
-
-const a = []; a.push(a);
-const b = []; b.push(b);
-
-console.log(equal(a, b));
-
-assertEqual([a], b);
-assertEqual(a, [b]);
-assertEqual([a], [b]);
-
-a.push(1);
-b.push(1);
-assertEqual(a, b);
-assertEqual([a, 1], b);
-assertEqual(a, [b, 1]);
-
-const ring1 = { self: { self: { self: {} }}};
-ring1.self.self.self.self = ring1;
-const ring2 = { self: { self: {} }};
-ring2.self.self.self = ring2;
-assertEqual(ring1, ring2);
-
-ring1.self.self.self.self = ring1.self;
-assertEqual(ring1, ring2)
-
-*/
-
-// Should tolerate deep cycles
+/// Should tolerate deep cycles
 
 console.log("\nComparing arrays with deep cycles:");
 
@@ -125,3 +94,11 @@ console.log(equal(ring1, ring2), "expected: true");  // true
 
 ring1.self.self.self.self = ring1.self;
 console.log(equal(ring1, ring2), "expected: true");  // true
+
+console.log("function equality");
+const f1 = () => {};
+const f2 = () => {};
+console.log(equal(f1, f2), "Expected: true");  // true
+const f3 = () => 4;
+const f4 = () => 2+2;
+console.log(equal(f3, f4));  // false
